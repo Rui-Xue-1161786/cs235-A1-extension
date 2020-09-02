@@ -1,6 +1,134 @@
 from domainmodel.genre import Genre
 from domainmodel.actor import Actor
 from domainmodel.director import Director
+from domainmodel.movie import Movie
+
+
+class Actor:
+
+    def __init__(self, actor_full_name: str):
+        if actor_full_name == "" or type(actor_full_name) is not str:
+            self.__actor_full_name = None
+        else:
+            self.__actor_full_name = actor_full_name.strip()
+        self.__colleague_list = []
+
+    def add_actor_colleague(self, other):
+        if not isinstance(other, Actor):
+            pass
+        self.__colleague_list.append(other)
+
+    def check_if_this_actor_worked_with(self, colleague):
+        if colleague in self.__colleague_list:
+            return True
+        return False
+
+    @property
+    def actor_full_name(self) -> str:
+        return self.__actor_full_name
+
+    @actor_full_name.setter
+    def actor_full_name(self,other):
+        if other == "" or type(other) is not str:
+            self.__actor_full_name = None
+        else:
+            self.__actor_full_name = other.strip()
+
+    @property
+    def colleague_list(self):
+        return self.__colleague_list
+
+
+    def __repr__(self):
+        return f"<Actor {self.__actor_full_name}>"
+
+    def __eq__(self, other):
+        if not isinstance(other, Actor):
+            return False
+        return other.__actor_full_name == self.__actor_full_name
+
+    def __lt__(self, other):
+        if self.actor_full_name > other.actor_full_name:
+            return False
+        else:
+            return True
+
+    def __hash__(self):
+        return hash(self.__actor_full_name)
+
+
+class Director:
+
+    def __init__(self, director_full_name: str):
+        if director_full_name == "" or type(director_full_name) is not str:
+            self.__director_full_name = None
+        else:
+            self.__director_full_name = director_full_name.strip()
+
+    @property
+    def director_full_name(self) -> str:
+        return self.__director_full_name
+
+    @director_full_name.setter
+    def director_full_name(self, director_full_name):
+        if director_full_name == "" or type(director_full_name) is not str:
+            self.__director_full_name = None
+        else:
+            self.__director_full_name = director_full_name.strip()
+
+    def __repr__(self):
+        return f"<Director {self.__director_full_name}>"
+
+    def __eq__(self, other):
+        if not isinstance(other, Director):
+            return False
+        return other.__director_full_name == self.__director_full_name
+
+    def __lt__(self, other):
+        if self.director_full_name > other.director_full_name:
+            return False
+        else:
+            return True
+
+    def __hash__(self):
+        return hash(self.__director_full_name)
+
+
+class Genre:
+
+    def __init__(self, genre_name: str):
+        if genre_name == "" or type(genre_name) is not str:
+            self.__genre_name = None
+        else:
+            self.__genre_name = genre_name
+
+    @property
+    def genre_name(self) -> str:
+        return self.__genre_name
+
+    @genre_name.setter
+    def genre_name(self,other):
+        if other == "" or type(other) is not str:
+            self.__genre_name = None
+        else:
+            self.__genre_name = other
+
+    def __repr__(self):
+        return f"<Genre {self.__genre_name}>"
+
+    def __eq__(self, other):
+        if not isinstance(other, Genre):
+            return False
+        return other.__genre_name == self.__genre_name
+
+    def __lt__(self, other):
+        if self.__genre_name > other.__genre_name:
+            return False
+        else:
+            return True
+
+    def __hash__(self):
+        return hash(self.__genre_name)
 
 
 class Movie:
@@ -22,22 +150,6 @@ class Movie:
         self._actors: [Actor] = list()
         self._genres: [Genre] = list()
         self._runtime_minutes: int = None
-        self._rating: float = 0.0
-        self._rating_count = 0
-
-    @property
-    def rating(self) -> int:
-        return self._rating
-
-    @rating.setter
-    def rating(self, number):
-        new_total = self.rating * self._rating_count + number
-        self._rating_count += 1
-        self._rating = round((new_total) / float(self._rating_count),1)
-
-    @property
-    def rating_count(self) -> int:
-        return self._rating_count
 
     @property
     def years(self) -> int:
@@ -136,19 +248,8 @@ class Movie:
         elif genre in self._genres:
             self._genres.remove(genre)
 
-    def __change_rating__(self, rating_number, number_of_cutting_count):
-        if type(rating_number) == float and 0 < rating_number < 11:
-            self._rating = rating_number
-            if number_of_cutting_count <= self._rating_count and type(number_of_cutting_count) == int:
-                self._rating_count -= number_of_cutting_count
-
-
     def __repr__(self):
-        if self._rating_count >= 3:
-            return f"<Movie {self._title}, {self._years}, Rating={self._rating}>"
-        else:
-            return f"<Movie {self._title}, {self._years}, No-Enough-Rating>"
-
+        return f"<Movie {self._title}, {self._years}>"
 
     def __eq__(self, other):
         if not isinstance(other, Movie):
@@ -171,6 +272,20 @@ class Movie:
     def __hash__(self):
         a = hash(self._title)
         b = hash(self._years)
-        return (a + b)
+        return(a+b)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
